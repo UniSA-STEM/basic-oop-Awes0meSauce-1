@@ -6,3 +6,9 @@ ID: <student_id>
 Username: <username>
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
+
+from Hacker import Hacker
+
+hacker = Hacker()
+
+print(hacker.trace_level)
