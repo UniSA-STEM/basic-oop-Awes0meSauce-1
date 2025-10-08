@@ -6,3 +6,10 @@ ID: <student_id>
 Username: <username>
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
+
+class Hacker:
+    def __init__(self):
+        self.name = "Hacker"
+        self.inventory = ""
+        self.rig = False
+        self.trace_level = 0
