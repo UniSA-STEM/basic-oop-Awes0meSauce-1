@@ -11,4 +11,9 @@ from Hacker import Hacker
 
 hacker = Hacker()
 
+hacker.data_spike()
+hacker.inventory.append("Data_Spike")
+hacker.data_spike()
+
+
 print(hacker)
