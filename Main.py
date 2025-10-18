@@ -11,4 +11,4 @@ from Hacker import Hacker
 
 hacker = Hacker()
 
-print(hacker.trace_level)
+print(hacker)
