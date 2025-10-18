@@ -16,7 +16,7 @@ asset = Asset()
 class Hacker:
     def __init__(self):
         self.name = "Hacker"
-        self.inventory = ["Data_Spike"]
+        self.inventory = ["Data_Spike", "Security_Chip","Hardware_Patch"]
         self.rig = False
         self.trace_level = 0
 
@@ -42,13 +42,18 @@ class Hacker:
                 self.inventory.remove("Removable_Drive")
 
     def encrypt_assets(self):
-        if self.inventory == ["Security_Chip"]:
-            Asset.encrypted = True
+        for item in self.inventory:
+            if item == "Security_Chip":
+               Asset.encrypted = True
+               print("Asset encrypted.")
+               print(Asset.encrypted)
 
     def upgrade_rig(self):
-        if self.inventory == ["Hardware_Patch"]:
-            self.inventory.remove("Hardware_Patch")
-            rig.upgrade_level()
+        for item in self.inventory:
+            if item == "Hardware_Patch":
+               self.inventory.remove("Hardware_Patch")
+               upgrade_level = rig.upgrade_level
+               print(upgrade_level)
 
     def store_asset(self, asset1):
         if asset1 == self.inventory:
