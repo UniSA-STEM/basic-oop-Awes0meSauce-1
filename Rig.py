@@ -23,28 +23,34 @@ class Rig:
     def get_storage(self):
         return self.__storage
 
+    def get_damage_counter(self):
+        return self.__damage_counter
+
+    def get_upgrade_level(self):
+        return self.__upgrade_level
+
     def repair(self):
-        if self.__storage == "CryptoToken":
+        if self.get_storage() == "CryptoToken":
             self.__damage_counter = 0
             self.__broken = False
 
     def level_upgrade(self):
-        if self.__upgrade_level >= 0:
+        if self.get_upgrade_level() >= 0:
            self.__upgrade_level += 1
-        return self.__upgrade_level
+        return self.get_upgrade_level()
 
     def damage(self):
-        if self.__damage_counter == 2:
+        if self.get_damage_counter() == 2:
            self.__broken = True
            print("Rig damaged!")
 
         else:
             self.__damage_counter += 1
 
-        return self.__damage_counter
+        return self.get_damage_counter()
 
     def asset_generator(self):
-        self.__storage.append("Asset")
+        self.get_storage().append("Asset")
         time.sleep(60)
 
     def __str__(self):

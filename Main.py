@@ -14,10 +14,15 @@ from Rig import Rig
 hacker = Hacker()
 asset = Asset()
 rig = Rig()
-hacker.set_inventory(["CryptoToken"])
-hacker.rig()
-hacker.set_inventory(["Data_Spike"])
-print(hacker.get_inventory())
-hacker.data_spike()
-print(hacker)
-print(rig)
+
+# hacker.set_inventory(["CryptoToken"])
+# hacker.rig()
+# hacker.set_inventory(["Data_Spike"])
+# print(hacker.get_inventory())
+# hacker.data_spike()
+# print(hacker)
+# print(rig)
+
+for num in range(6):
+    hacker.trace_level()
+    print(hacker.get_trace_level())

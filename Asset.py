@@ -12,6 +12,12 @@ class Asset:
         self.__description = []
         self.__encrypted = False
 
+    def get_encrypted(self):
+        return self.__encrypted
+
+    def set_encrypted(self, encrypted):
+        self.__encrypted = encrypted
+
     def __str__(self):
         if not self.__encrypted:
            return str(self.__name)
