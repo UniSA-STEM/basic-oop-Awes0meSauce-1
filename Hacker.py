@@ -15,23 +15,23 @@ asset = Asset()
 
 class Hacker:
     def __init__(self):
-        self.name = "Hacker"
-        self.inventory = ["Data_Spike", "Security_Chip","Hardware_Patch", "test"]
-        self.rig = False
-        self.trace_level = 0
+        self.__name = "Hacker"
+        self.__inventory = ["Data_Spike", "Security_Chip","Hardware_Patch", "test"]
+        self.__rig = False
+        self.__trace_level = 0
 
     def trace_level(self):
-        if self.trace_level >= 5:
+        if self.__trace_level >= 5:
             print("Hacker is exposed, please lower trace level.")
-            self.trace_level += 1
+            self.__trace_level += 1
         else:
-            self.trace_level += 1
-        print(self.trace_level)
+            self.__trace_level += 1
+        print(self.__trace_level)
 
     def data_spike(self):
-        for item in self.inventory:
+        for item in self.__inventory:
             if item == "Data_Spike":
-                self.inventory.remove("Data_Spike")
+                self.__inventory.remove("Data_Spike")
                 print("Data Spike item removed.")
                 damage_counter = rig.damage()
                 print(damage_counter)
@@ -39,32 +39,32 @@ class Hacker:
                 print("A Data Spike item was not found.")
 
             if rig.broken:
-                self.inventory.remove("Removable_Drive")
+                self.__inventory.remove("Removable_Drive")
 
     def encrypt_assets(self):
-        for item in self.inventory:
+        for item in self.__inventory:
             if item == "Security_Chip":
                Asset.encrypted = True
                print("Asset encrypted.")
                print(Asset.encrypted)
 
     def upgrade_rig(self):
-        for item in self.inventory:
+        for item in self.__inventory:
             if item == "Hardware_Patch":
-               self.inventory.remove("Hardware_Patch")
+               self.__inventory.remove("Hardware_Patch")
                upgrade_level = rig.level_upgrade()
                print(upgrade_level)
 
     def store_asset(self, asset1):
-        for item in self.inventory:
+        for item in self.__inventory:
             if asset1 == item:
                rig.storage.append(asset1)
                print(rig.storage)
-               self.inventory.remove(item)
+               self.__inventory.remove(item)
 
     def retrieve_asset(self, asset2):
         if asset2 == rig.storage:
-            self.inventory.append(asset2)
+            self.__inventory.append(asset2)
 
     def __str__(self):
-        return f"{self.name} + {self.inventory} + {self.rig} + {self.trace_level}"
+        return f"{self.__name} + {self.__inventory} + {self.__rig} + {self.__trace_level}"

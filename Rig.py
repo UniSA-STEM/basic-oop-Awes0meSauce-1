@@ -11,35 +11,35 @@ import time
 
 class Rig:
     def __init__(self):
-        self.name = "Rig"
-        self.damage_counter = 0
-        self.broken = False
-        self.storage = []
-        self.upgrade_level = 0
+        self.__name = "Rig"
+        self.__damage_counter = 0
+        self.__broken = False
+        self.__storage = []
+        self.__upgrade_level = 0
 
     def repair(self):
-        if self.storage == "CryptoToken":
-            self.damage_counter = 0
-            self.broken = False
+        if self.__storage == "CryptoToken":
+            self.__damage_counter = 0
+            self.__broken = False
 
     def level_upgrade(self):
-        if self.upgrade_level >= 0:
-           self.upgrade_level += 1
-        return self.upgrade_level
+        if self.__upgrade_level >= 0:
+           self.__upgrade_level += 1
+        return self.__upgrade_level
 
     def damage(self):
-        if self.damage_counter == 2:
-           self.broken = True
+        if self.__damage_counter == 2:
+           self.__broken = True
            print("Rig damaged!")
 
         else:
-            self.damage_counter += 1
+            self.__damage_counter += 1
 
-        return self.damage_counter
+        return self.__damage_counter
 
     def asset_generator(self):
-        self.storage.append("Asset")
+        self.__storage.append("Asset")
         time.sleep(60)
 
     def __str__(self):
-        return f"Rig {self.name} + {self.storage}"
+        return f"Rig {self.__name} + {self.__storage}"

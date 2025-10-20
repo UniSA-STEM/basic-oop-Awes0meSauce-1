@@ -8,14 +8,14 @@ This is my own work as defined by the University's Academic Misconduct Policy.
 """
 class Asset:
     def __init__(self):
-        self.name = "Asset"
-        self.description = []
-        self.encrypted = False
+        self.__name = "Asset"
+        self.__description = []
+        self.__encrypted = False
 
     def __str__(self):
-        if not self.encrypted:
-           return str(self.name)
+        if not self.__encrypted:
+           return str(self.__name)
 
-        elif self.encrypted:
+        elif self.__encrypted:
              return None
         return None
