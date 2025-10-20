@@ -17,6 +17,12 @@ class Rig:
         self.__storage = []
         self.__upgrade_level = 0
 
+    def get_broken(self):
+        return self.__broken
+
+    def get_storage(self):
+        return self.__storage
+
     def repair(self):
         if self.__storage == "CryptoToken":
             self.__damage_counter = 0

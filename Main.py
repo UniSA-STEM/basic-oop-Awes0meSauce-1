@@ -14,9 +14,10 @@ from Rig import Rig
 hacker = Hacker()
 asset = Asset()
 rig = Rig()
-
-hacker.store_asset("test")
-
-
+hacker.set_inventory(["CryptoToken"])
+hacker.rig()
+hacker.set_inventory(["Data_Spike"])
+print(hacker.get_inventory())
+hacker.data_spike()
 print(hacker)
 print(rig)

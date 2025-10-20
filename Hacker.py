@@ -16,9 +16,22 @@ asset = Asset()
 class Hacker:
     def __init__(self):
         self.__name = "Hacker"
-        self.__inventory = ["Data_Spike", "Security_Chip","Hardware_Patch", "test"]
+        self.__inventory = []
         self.__rig = False
         self.__trace_level = 0
+
+    def get_inventory(self):
+        return self.__inventory
+
+    def set_inventory(self, inventory):
+        self.__inventory = inventory
+
+    def rig(self):
+        for item in self.get_inventory():
+            if item == "CryptoToken":
+               self.get_inventory().remove("CryptoToken")
+               self.__rig = True
+               print("The rig has been activated!")
 
     def trace_level(self):
         if self.__trace_level >= 5:
@@ -29,16 +42,16 @@ class Hacker:
         print(self.__trace_level)
 
     def data_spike(self):
-        for item in self.__inventory:
+        for item in self.get_inventory():
             if item == "Data_Spike":
-                self.__inventory.remove("Data_Spike")
+                self.get_inventory().remove("Data_Spike")
                 print("Data Spike item removed.")
                 damage_counter = rig.damage()
                 print(damage_counter)
             else:
                 print("A Data Spike item was not found.")
 
-            if rig.broken:
+            if rig.get_broken():
                 self.__inventory.remove("Removable_Drive")
 
     def encrypt_assets(self):
@@ -58,12 +71,12 @@ class Hacker:
     def store_asset(self, asset1):
         for item in self.__inventory:
             if asset1 == item:
-               rig.storage.append(asset1)
-               print(rig.storage)
+               rig.get_storage().append(asset1)
+               print(rig.get_storage())
                self.__inventory.remove(item)
 
     def retrieve_asset(self, asset2):
-        if asset2 == rig.storage:
+        if asset2 == rig.get_storage():
             self.__inventory.append(asset2)
 
     def __str__(self):
