@@ -1,9 +1,9 @@
 """
 File: main.py
 Description: <A brief description of this Python module.>
-Author: <full name>
-ID: <student_id>
-Username: <username>
+Author: Jack Gallagher
+ID: 110410979
+Username: galjh002
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 
