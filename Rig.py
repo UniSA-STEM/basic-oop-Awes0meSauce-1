@@ -22,7 +22,7 @@ class Rig:
             self.damage_counter = 0
             self.broken = False
 
-    def upgrade_level(self):
+    def level_upgrade(self):
         if self.upgrade_level >= 0:
            self.upgrade_level += 1
         return self.upgrade_level
@@ -42,4 +42,4 @@ class Rig:
         time.sleep(60)
 
     def __str__(self):
-        return str(self.name)
+        return f"Rig {self.name} + {self.storage}"

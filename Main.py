@@ -8,10 +8,15 @@ This is my own work as defined by the University's Academic Misconduct Policy.
 """
 
 from Hacker import Hacker
+from Asset import Asset
+from Rig import Rig
 
 hacker = Hacker()
+asset = Asset()
+rig = Rig()
 
-hacker.upgrade_rig()
+hacker.store_asset("test")
 
 
 print(hacker)
+print(rig)
