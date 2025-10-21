@@ -85,20 +85,28 @@ class Hacker:
         my_rig = self.get_rig
         storage = my_rig.get_storage()
         if "Data_Spike" in storage:
+
            storage.remove("Data_Spike")
            print("Data Spike item removed.")
+
            damage = other_player.get_rig.damage()
+
            print(f"{self.__name} has damaged {other_player.__name}'s rig!")
            print(f"{other_player.__name}'s rig damage counter is now {damage}. Broken={other_player.get_rig.get_broken()}")
            print(f"{self.__name}'s rig -> {my_rig}")
            print(f"{other_player.__name}'s rig -> {other_player.get_rig}")
+           if other_player.get_rig.get_broken() == True and "Removable_Drive" in storage:
+              other_player_storage = other_player.get_rig.get_storage()
+              for item in other_player_storage[:]:
+                  my_rig.get_storage().append(item)
+                  other_player_storage.remove(item)
+
 
         else:
             print("A Data Spike item was not found.")
 
             if rig.get_broken():
                 self.__inventory.remove("Removable_Drive")
-        print(self.__str__())
 
     def encrypt_assets(self):
         for item in self.__inventory:

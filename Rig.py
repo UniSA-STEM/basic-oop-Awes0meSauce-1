@@ -14,7 +14,7 @@ class Rig:
         self.__name = "Rig"
         self.__damage_counter = 0
         self.__broken = False
-        self.__storage = ["Data_Spike", "Data_Spike", "Removable_Drive"]
+        self.__storage = ["Data_Spike", "Data_Spike", "Data_Spike", "Removable_Drive"]
         self.__upgrade_level = 0
 
     def get_broken(self):
@@ -40,12 +40,12 @@ class Rig:
         return self.get_upgrade_level()
 
     def damage(self):
-        if self.get_damage_counter() == 2:
-           self.__broken = True
-           print("Rig damaged!")
+        if self.get_damage_counter() != 2:
+           self.__damage_counter += 1
 
         else:
-            self.__damage_counter += 1
+            self.__broken = True
+            print("Rig damaged!")
 
         return self.get_damage_counter()
 
