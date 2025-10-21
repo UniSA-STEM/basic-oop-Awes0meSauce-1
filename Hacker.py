@@ -6,6 +6,8 @@ ID: 110410979
 Username: galjh002
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
+from random import choice
+
 from Rig import Rig
 from Asset import Asset
 
@@ -14,9 +16,9 @@ asset = Asset()
 
 
 class Hacker:
-    def __init__(self):
-        self.__name = "Hacker"
-        self.__inventory = []
+    def __init__(self, name):
+        self.__name = name
+        self.__inventory = ["CryptoToken"]
         self.__rig = False
         self.__trace_level = 0
 
@@ -32,18 +34,32 @@ class Hacker:
     def set_inventory(self, inventory):
         self.__inventory = inventory
 
-    def battle(self):
-        choice = input("Please enter your choice: [1]: Launch Data Spike [2] Encrypt Inventory [3] Upgrade Rig [4] Store_Asset [5] Retrieve Asset")
-        if choice == 1:
-           self.data_spike()
-        elif choice == 2:
-             self.encrypt_assets()
-        elif choice == 3:
-            self.upgrade_rig()
-        elif choice == 4:
-             self.store_asset()
-        elif choice == 5:
-            self.retrieve_asset()
+    def battle(self, players):
+        turn = 0
+        while True:
+            current_turn = players[turn]
+            print(f"\n{current_turn.__name}'s turn!")
+            battle_input = 0
+            while battle_input != 7:
+                  battle_input = int(input("Please enter your choice: [1] Unlock Rig [2]: Launch Data Spike [3] Encrypt Inventory [4] Upgrade Rig [5] Store_Asset [6] Retrieve Asset [7] Finish Turn"))
+                  if battle_input == 1:
+                     current_turn.rig()
+                  elif battle_input == 2:
+                     current_turn.data_spike()
+                  elif battle_input == 3:
+                       current_turn.encrypt_assets()
+                  elif battle_input == 4:
+                       current_turn.upgrade_rig()
+                  elif battle_input == 5:
+                       current_turn.store_asset()
+                  elif battle_input == 6:
+                       current_turn.retrieve_asset()
+                  elif battle_input == 7:
+                       print(f"{current_turn.__name} has ended the turn")
+                  else:
+                      print(f"{current_turn.__name} has entered an invalid choice")
+
+            turn = 1 - turn
 
 
     def rig(self):
@@ -52,12 +68,14 @@ class Hacker:
                self.get_inventory().remove("CryptoToken")
                self.__rig = True
                print("The rig has been activated!")
+               print(self.__str__())
 
     def trace_level(self):
         if self.get_trace_level() >= 5:
             print("Hacker is exposed, please lower trace level.")
         else:
             self.__trace_level += 1
+        print(self.__str__())
 
     def data_spike(self):
         for item in self.get_inventory():
@@ -71,6 +89,7 @@ class Hacker:
 
             if rig.get_broken():
                 self.__inventory.remove("Removable_Drive")
+        print(self.__str__())
 
     def encrypt_assets(self):
         for item in self.__inventory:

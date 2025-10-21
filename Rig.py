@@ -14,7 +14,7 @@ class Rig:
         self.__name = "Rig"
         self.__damage_counter = 0
         self.__broken = False
-        self.__storage = []
+        self.__storage = ["Data_Spike", "Data_Spike", "Removable_Drive"]
         self.__upgrade_level = 0
 
     def get_broken(self):

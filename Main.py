@@ -11,7 +11,9 @@ from Hacker import Hacker
 from Asset import Asset
 from Rig import Rig
 
-hacker = Hacker()
+
+hacker1 = Hacker("Hacker1")
+hacker2 = Hacker("Hacker2")
 asset = Asset()
 rig = Rig()
 
@@ -23,6 +25,9 @@ rig = Rig()
 # print(hacker)
 # print(rig)
 
-for num in range(6):
-    hacker.trace_level()
-    print(hacker.get_trace_level())
+# for num in range(6):
+#     hacker.trace_level()
+#     print(hacker.get_trace_level())
+
+
+hacker1.battle([hacker1, hacker2])
