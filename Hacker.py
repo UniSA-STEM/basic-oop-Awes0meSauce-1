@@ -6,7 +6,6 @@ ID: 110410979
 Username: galjh002
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
-from random import choice
 
 from Rig import Rig
 from Asset import Asset
@@ -19,7 +18,8 @@ class Hacker:
     def __init__(self, name):
         self.__name = name
         self.__inventory = ["CryptoToken"]
-        self.__rig = False
+        self.rig = False
+        self.get_rig = Rig()
         self.__trace_level = 0
 
     def get_inventory(self):
@@ -27,6 +27,9 @@ class Hacker:
 
     def get_trace_level(self):
         return self.__trace_level
+
+    def get_rig(self):
+        return self.__rig
 
     def set_trace_level(self, trace_level):
         self.__trace_level = trace_level
@@ -38,6 +41,7 @@ class Hacker:
         turn = 0
         while True:
             current_turn = players[turn]
+            other_player = players[1 - turn]
             print(f"\n{current_turn.__name}'s turn!")
             battle_input = 0
             while battle_input != 7:
@@ -45,7 +49,7 @@ class Hacker:
                   if battle_input == 1:
                      current_turn.rig()
                   elif battle_input == 2:
-                     current_turn.data_spike()
+                     current_turn.data_spike(other_player)
                   elif battle_input == 3:
                        current_turn.encrypt_assets()
                   elif battle_input == 4:
@@ -77,15 +81,20 @@ class Hacker:
             self.__trace_level += 1
         print(self.__str__())
 
-    def data_spike(self):
-        for item in self.get_inventory():
-            if item == "Data_Spike":
-                self.get_inventory().remove("Data_Spike")
-                print("Data Spike item removed.")
-                damage_counter = rig.damage()
-                print(damage_counter)
-            else:
-                print("A Data Spike item was not found.")
+    def data_spike(self, other_player):
+        my_rig = self.get_rig
+        storage = my_rig.get_storage()
+        if "Data_Spike" in storage:
+           storage.remove("Data_Spike")
+           print("Data Spike item removed.")
+           damage = other_player.get_rig.damage()
+           print(f"{self.__name} has damaged {other_player.__name}'s rig!")
+           print(f"{other_player.__name}'s rig damage counter is now {damage}. Broken={other_player.get_rig.get_broken()}")
+           print(f"{self.__name}'s rig -> {my_rig}")
+           print(f"{other_player.__name}'s rig -> {other_player.get_rig}")
+
+        else:
+            print("A Data Spike item was not found.")
 
             if rig.get_broken():
                 self.__inventory.remove("Removable_Drive")
@@ -99,11 +108,25 @@ class Hacker:
                print(Asset.get_encrypted())
 
     def upgrade_rig(self):
+        if not self.get_rig:
+            print("Please activate the rig first.")
+            print(self.__str__())
+            return
+
+        if not self.get_inventory():
+            print("You have no inventory.")
+            print(self.__str__())
+            return
+
         for item in self.get_inventory():
             if item == "Hardware_Patch":
-               self.__inventory.remove("Hardware_Patch")
-               upgrade_level = rig.level_upgrade()
-               print(upgrade_level)
+                self.__inventory.remove("Hardware_Patch")
+                upgrade_level = rig.level_upgrade()
+                print(upgrade_level)
+            else:
+                print("A Hardware Patch item was not found.")
+
+        print(self.__str__())
 
     def store_asset(self):
         asset1 = input("What asset do you want to store?:")
@@ -119,4 +142,4 @@ class Hacker:
             self.__inventory.append(asset2)
 
     def __str__(self):
-        return f"{self.__name} + {self.__inventory} + {self.__rig} + {self.__trace_level}"
+        return f"{self.__name} + {self.__inventory} + {self.get_rig} + {self.__trace_level}"
