@@ -83,8 +83,6 @@ class Hacker:
     def trace_level(self):
         if self.get_trace_level() >= 5:
             print("Hacker is exposed, please lower trace level.")
-        else:
-            self.__trace_level += 1
         print(self.__str__())
 
     def data_spike(self, other_player):
@@ -105,15 +103,18 @@ class Hacker:
                 f"{other_player.__name}'s rig damage counter is now {damage}. Broken={other_player.get_rig.get_broken()}")
            print(f"{self.__name}'s rig -> {my_rig}")
            print(f"{other_player.__name}'s rig -> {other_player.get_rig}")
-           if other_player.get_rig.get_broken() == True and "Removable_Drive" in storage and other_player.get_asset.get_encrypted() == False:
+           if "Removable_Drive" not in storage:
+                 print("There was no Removable_Drive in the storage")
+                 print(f"{my_rig}")
+           elif other_player.get_asset.get_encrypted():
+                print(f"The rig was encrypted. {other_player.get_asset.get_encrypted()}")
+
+           elif other_player.get_rig.get_broken() == True and other_player.get_asset.get_encrypted() == False:
               my_rig.get_storage().remove("Removable_Drive")
               other_player_storage = other_player.get_rig.get_storage()
               for item in other_player_storage[:]:
                   my_rig.get_storage().append(item)
                   other_player_storage.remove(item)
-              else:
-                   print("There was no Removable_Drive in the storage or the Rig was encrypted.")
-                   print(f"{my_rig}", other_player.get_asset.get_encrypted())
 
 
         else:
@@ -121,19 +122,21 @@ class Hacker:
 
             if rig.get_broken():
                 self.__inventory.remove("Removable_Drive")
+        self.__trace_level += 1
 
     def encrypt_assets(self):
-        for item in self.__inventory:
+        for item in list(self.__inventory):
             if item == "SecurityChip":
                 self.__inventory.remove(item)
-                asset.set_encrypted(1)
+                self.get_asset.set_encrypted(1)
                 print("Asset encrypted.")
+                self.get_asset.set_encrypted(1)
 
     def upgrade_rig(self):
         my_rig = self.get_rig
         storage = my_rig.get_storage()
 
-        if not self.get_rig:
+        if not self.__rig:
             print("Please activate the rig first.")
             print(self.__str__())
             return
@@ -171,6 +174,7 @@ class Hacker:
                     rig.get_storage().append(asset1)
                     print(rig.get_storage())
                     self.get_inventory().remove(item)
+        self.__trace_level += 1
 
     def retrieve_asset(self):
         my_rig = self.get_rig
@@ -187,6 +191,7 @@ class Hacker:
              asset2 = input("What asset do you want to retrieve?:")
              if asset2 == rig.get_storage():
                 self.__inventory.append(asset2)
+        self.__trace_level += 1
 
     def __str__(self):
         return f"{self.__name} + {self.__inventory} + {self.get_rig} + {self.__trace_level}"

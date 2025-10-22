@@ -47,9 +47,9 @@ class Rig:
         reduction_damage = 0.2 * base_damage
 
         true_damage = base_damage + (reduction_damage * (self.get_upgrade_level() - 1))
+        self.__damage_counter = self.__damage_counter + true_damage
 
-        if self.get_damage_counter() != 2:
-           self.__damage_counter = true_damage
+        if self.get_damage_counter() <= 2:
            print(self.__damage_counter)
 
         else:
