@@ -180,18 +180,20 @@ class Hacker:
     def retrieve_asset(self):
         my_rig = self.get_rig
         storage = my_rig.get_storage()
+        inventory = self.get_inventory()
 
         input1 = input("Would you like to retrieve one asset or all assets [O|A]")
         if input1 == "O":
-            for item in my_rig.get_storage():
-                self.get_inventory().append(item)
-                my_rig.get_storage().remove(item)
+            for item in storage:
+                inventory.append(item)
+                storage.remove(item)
             print(f"{self.__name}'s inventory -> {self.__inventory}")
             print(f"{self.__name}'s rig -> {my_rig}")
         elif input1 == "A":
              asset2 = input("What asset do you want to retrieve?:")
-             if asset2 == rig.get_storage():
-                self.__inventory.append(asset2)
+             if asset2 in storage:
+                inventory.append(asset2)
+                storage.remove(asset2)
         self.__trace_level += 1
 
     def __str__(self):
