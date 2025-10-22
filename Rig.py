@@ -62,7 +62,11 @@ class Rig:
         assets = ["CryptoToken", "Data_Spike", "Removable_Drive", "SecurityChip", "HardwarePatch"]
         random_number = random.randint(1, 4)
         if turn_counter == random_number:
-           self.get_storage().append(random.choice(assets))
+           new_asset = random.choice(assets)
+           self.get_storage().append(new_asset)
+           print(f"Asset generated: {new_asset}")
+           turn_counter = 0
+        return turn_counter
 
 
     def __str__(self):

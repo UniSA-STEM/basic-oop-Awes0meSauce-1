@@ -18,7 +18,7 @@ class Hacker:
     def __init__(self, name):
         self.__name = name
         self.__inventory = ["CryptoToken", "SecurityChip"]
-        self.rig = False
+        self.__rig = False
         self.get_rig = Rig()
         self.get_asset = Asset()
         self.__trace_level = 0
@@ -46,11 +46,11 @@ class Hacker:
             other_player = players[1 - turn]
             print(f"\n{current_turn.__name}'s turn!")
             battle_input = 0
-            while battle_input != 7:
+            while battle_input != 8:
                 battle_input = int(input(
                     "Please enter your choice: [1] Unlock Rig [2]: Launch Data Spike [3] Encrypt Inventory [4] Upgrade Rig [5] Store_Asset [6] Retrieve Asset [7] See Inventory [8] Finish Turn"))
                 if battle_input == 1:
-                    current_turn.rig()
+                    current_turn.rig_activation()
                 elif battle_input == 2:
                     current_turn.data_spike(other_player)
                 elif battle_input == 3:
@@ -72,7 +72,7 @@ class Hacker:
             turn_counter += 1
             current_turn.get_rig.asset_generator(turn_counter)
 
-    def rig(self):
+    def rig_activation(self):
         for item in self.get_inventory():
             if item == "CryptoToken":
                 self.get_inventory().remove("CryptoToken")
@@ -90,27 +90,30 @@ class Hacker:
     def data_spike(self, other_player):
         my_rig = self.get_rig
         storage = my_rig.get_storage()
+        if not self.__rig:
+           print("Please activate the rig first.")
+           return
         if "Data_Spike" in storage:
 
-            storage.remove("Data_Spike")
-            print("Data Spike item removed.")
+           storage.remove("Data_Spike")
+           print("Data Spike item removed.")
 
-            damage = other_player.get_rig.damage()
+           damage = other_player.get_rig.damage()
 
-            print(f"{self.__name} has damaged {other_player.__name}'s rig!")
-            print(
+           print(f"{self.__name} has damaged {other_player.__name}'s rig!")
+           print(
                 f"{other_player.__name}'s rig damage counter is now {damage}. Broken={other_player.get_rig.get_broken()}")
-            print(f"{self.__name}'s rig -> {my_rig}")
-            print(f"{other_player.__name}'s rig -> {other_player.get_rig}")
-            if other_player.get_rig.get_broken() == True and "Removable_Drive" in storage and other_player.get_asset.get_encrypted() == False:
-                my_rig.get_storage().remove("Removable_Drive")
-                other_player_storage = other_player.get_rig.get_storage()
-                for item in other_player_storage[:]:
-                    my_rig.get_storage().append(item)
-                    other_player_storage.remove(item)
-            else:
-                print("There was no Removable_Drive in the storage or the Rig was encrypted.")
-                print(f"{my_rig}", other_player.get_asset.get_encrypted())
+           print(f"{self.__name}'s rig -> {my_rig}")
+           print(f"{other_player.__name}'s rig -> {other_player.get_rig}")
+           if other_player.get_rig.get_broken() == True and "Removable_Drive" in storage and other_player.get_asset.get_encrypted() == False:
+              my_rig.get_storage().remove("Removable_Drive")
+              other_player_storage = other_player.get_rig.get_storage()
+              for item in other_player_storage[:]:
+                  my_rig.get_storage().append(item)
+                  other_player_storage.remove(item)
+              else:
+                   print("There was no Removable_Drive in the storage or the Rig was encrypted.")
+                   print(f"{my_rig}", other_player.get_asset.get_encrypted())
 
 
         else:
