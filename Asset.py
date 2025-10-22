@@ -16,11 +16,15 @@ class Asset:
         return self.__encrypted
 
     def set_encrypted(self, encrypted):
-        self.__encrypted = encrypted
+        if encrypted == 0:
+            self.__encrypted = False
+
+        elif encrypted == 1:
+            self.__encrypted = True
 
     def __str__(self):
         if not self.__encrypted:
-           return str(self.__name)
+           return str(f"{self.__name}, {self.__description}, {self.__encrypted}")
 
         elif self.__encrypted:
              return None

@@ -17,9 +17,10 @@ asset = Asset()
 class Hacker:
     def __init__(self, name):
         self.__name = name
-        self.__inventory = ["CryptoToken"]
+        self.__inventory = ["CryptoToken", "SecurityChip"]
         self.rig = False
         self.get_rig = Rig()
+        self.get_asset = Asset()
         self.__trace_level = 0
 
     def get_inventory(self):
@@ -95,11 +96,15 @@ class Hacker:
            print(f"{other_player.__name}'s rig damage counter is now {damage}. Broken={other_player.get_rig.get_broken()}")
            print(f"{self.__name}'s rig -> {my_rig}")
            print(f"{other_player.__name}'s rig -> {other_player.get_rig}")
-           if other_player.get_rig.get_broken() == True and "Removable_Drive" in storage:
+           if other_player.get_rig.get_broken() == True and "Removable_Drive" in storage and other_player.get_asset.get_encrypted() == False:
+              my_rig.get_storage().remove("Removable_Drive")
               other_player_storage = other_player.get_rig.get_storage()
               for item in other_player_storage[:]:
                   my_rig.get_storage().append(item)
                   other_player_storage.remove(item)
+           else:
+               print("There was no Removable_Drive in the storage or the Rig was encrypted.")
+               print(f"{my_rig}", other_player.get_asset.get_encrypted())
 
 
         else:
@@ -108,12 +113,13 @@ class Hacker:
             if rig.get_broken():
                 self.__inventory.remove("Removable_Drive")
 
+
     def encrypt_assets(self):
         for item in self.__inventory:
-            if item == "Security_Chip":
-               Asset.set_encrypted(True)
+            if item == "SecurityChip":
+               self.__inventory.remove(item)
+               asset.set_encrypted(1)
                print("Asset encrypted.")
-               print(Asset.get_encrypted())
 
     def upgrade_rig(self):
         if not self.get_rig:
@@ -131,8 +137,8 @@ class Hacker:
                 self.__inventory.remove("Hardware_Patch")
                 upgrade_level = rig.level_upgrade()
                 print(upgrade_level)
-            else:
-                print("A Hardware Patch item was not found.")
+        else:
+            print("A Hardware Patch item was not found.")
 
         print(self.__str__())
 
