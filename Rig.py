@@ -8,13 +8,15 @@ This is my own work as defined by the University's Academic Misconduct Policy.
 """
 import time
 
+from setuptools.unicode_utils import try_encode
+
 
 class Rig:
     def __init__(self):
         self.__name = "Rig"
         self.__damage_counter = 0
         self.__broken = False
-        self.__storage = ["Data_Spike", "Data_Spike", "Data_Spike", "Removable_Drive"]
+        self.__storage = ["Data_Spike", "Data_Spike", "Data_Spike", "Removable_Drive", "HardwarePatch"]
         self.__upgrade_level = 0
 
     def get_broken(self):
@@ -40,8 +42,14 @@ class Rig:
         return self.get_upgrade_level()
 
     def damage(self):
+        base_damage = 1
+        reduction_damage = 0.2 * base_damage
+
+        true_damage = base_damage + (reduction_damage * (self.get_upgrade_level() - 1))
+
         if self.get_damage_counter() != 2:
-           self.__damage_counter += 1
+           self.__damage_counter = true_damage
+           print(self.__damage_counter)
 
         else:
             self.__broken = True
