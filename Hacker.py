@@ -145,12 +145,24 @@ class Hacker:
         print(self.__str__())
 
     def store_asset(self):
-        asset1 = input("What asset do you want to store?:")
-        for item in self.get_inventory():
-            if asset1 == item:
-                rig.get_storage().append(asset1)
-                print(rig.get_storage())
+        my_rig = self.get_rig
+        storage = my_rig.get_storage()
+
+        input1 = input("Would you like to store one asset or all assets [O|A]")
+        if input1 == "O":
+            for item in self.get_inventory():
+                my_rig.get_storage().append(item)
                 self.get_inventory().remove(item)
+            print(f"{self.__name}'s inventory -> {self.__inventory}")
+            print(f"{self.__name}'s rig -> {my_rig}")
+        elif input1 == "A":
+             asset1 = input("What asset do you want to store?:")
+
+             for item in self.get_inventory():
+                 if asset1 == item:
+                    rig.get_storage().append(asset1)
+                    print(rig.get_storage())
+                    self.get_inventory().remove(item)
 
     def retrieve_asset(self):
         asset2 = input("What asset do you want to retrieve?:")
