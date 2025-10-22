@@ -9,9 +9,6 @@ This is my own work as defined by the University's Academic Misconduct Policy.
 import time
 import random
 
-from setuptools.unicode_utils import try_encode
-
-
 class Rig:
     def __init__(self):
         self.__name = "Rig"
