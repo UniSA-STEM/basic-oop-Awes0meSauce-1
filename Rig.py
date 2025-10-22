@@ -7,6 +7,7 @@ Username: galjh002
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 import time
+import random
 
 from setuptools.unicode_utils import try_encode
 
@@ -57,9 +58,12 @@ class Rig:
 
         return self.get_damage_counter()
 
-    def asset_generator(self):
-        self.get_storage().append("Asset")
-        time.sleep(60)
+    def asset_generator(self, turn_counter):
+        assets = ["CryptoToken", "Data_Spike", "Removable_Drive", "SecurityChip", "HardwarePatch"]
+        random_number = random.randint(1, 4)
+        if turn_counter == random_number:
+           self.get_storage().append(random.choice(assets))
+
 
     def __str__(self):
         return f"Rig {self.__name} + {self.__storage}"

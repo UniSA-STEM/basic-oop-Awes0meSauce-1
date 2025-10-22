@@ -40,6 +40,7 @@ class Hacker:
 
     def battle(self, players):
         turn = 0
+        turn_counter = 0
         while True:
             current_turn = players[turn]
             other_player = players[1 - turn]
@@ -47,7 +48,7 @@ class Hacker:
             battle_input = 0
             while battle_input != 7:
                 battle_input = int(input(
-                    "Please enter your choice: [1] Unlock Rig [2]: Launch Data Spike [3] Encrypt Inventory [4] Upgrade Rig [5] Store_Asset [6] Retrieve Asset [7] Finish Turn"))
+                    "Please enter your choice: [1] Unlock Rig [2]: Launch Data Spike [3] Encrypt Inventory [4] Upgrade Rig [5] Store_Asset [6] Retrieve Asset [7] See Inventory [8] Finish Turn"))
                 if battle_input == 1:
                     current_turn.rig()
                 elif battle_input == 2:
@@ -61,11 +62,15 @@ class Hacker:
                 elif battle_input == 6:
                     current_turn.retrieve_asset()
                 elif battle_input == 7:
+                     print(current_turn.__str__())
+                elif battle_input == 8:
                     print(f"{current_turn.__name} has ended the turn")
                 else:
                     print(f"{current_turn.__name} has entered an invalid choice")
 
             turn = 1 - turn
+            turn_counter += 1
+            current_turn.get_rig.asset_generator(turn_counter)
 
     def rig(self):
         for item in self.get_inventory():
@@ -165,9 +170,20 @@ class Hacker:
                     self.get_inventory().remove(item)
 
     def retrieve_asset(self):
-        asset2 = input("What asset do you want to retrieve?:")
-        if asset2 == rig.get_storage():
-            self.__inventory.append(asset2)
+        my_rig = self.get_rig
+        storage = my_rig.get_storage()
+
+        input1 = input("Would you like to retrieve one asset or all assets [O|A]")
+        if input1 == "O":
+            for item in my_rig.get_storage():
+                self.get_inventory().append(item)
+                my_rig.get_storage().remove(item)
+            print(f"{self.__name}'s inventory -> {self.__inventory}")
+            print(f"{self.__name}'s rig -> {my_rig}")
+        elif input1 == "A":
+             asset2 = input("What asset do you want to retrieve?:")
+             if asset2 == rig.get_storage():
+                self.__inventory.append(asset2)
 
     def __str__(self):
         return f"{self.__name} + {self.__inventory} + {self.get_rig} + {self.__trace_level}"
