@@ -10,38 +10,25 @@ This is my own work as defined by the University's Academic Misconduct Policy.
 from Rig import Rig
 from Asset import Asset
 
-rig = Rig()
-asset = Asset()
-
-
 class Hacker:
     def __init__(self, name):
         self.__name = name
         self.__inventory = ["CryptoToken", "SecurityChip"]
-        self.__rig = False
-        self.get_rig = Rig()
-        self.get_asset = Asset()
+        self.__rig_checker = False
+        self.__rig = Rig()
+        self.asset = Asset()
         self.__trace_level = 0
 
     # Gets the inventory and returns it.
-    def get_inventory(self):
-        return self.__inventory
-
+    def get_inventory(self): return self.__inventory
     # Gets the trace_level and returns it
-    def get_trace_level(self):
-        return self.__trace_level
-
+    def get_trace_level(self): return self.__trace_level
     # Gets the rig and returns it
-    def get_rig(self):
-        return self.__rig
-
+    def get_rig(self): return self.__rig
     # Sets the trace_level using the "trace_level"
-    def set_trace_level(self, trace_level):
-        self.__trace_level = trace_level
-
+    def set_trace_level(self, trace_level): self.__trace_level = trace_level
     # Sets the inventory using the "inventory"
-    def set_inventory(self, inventory):
-        self.__inventory = inventory
+    def set_inventory(self, inventory): self.__inventory = inventory
 
     # This function will allow the players to battle using the players Parameter and then this function
     # will allow the player in turn to select something until the player ends the turn
@@ -98,7 +85,7 @@ class Hacker:
             # Increases the turn counter by one
             turn_counter += 1
             # Calls the asset_generator class and passes in the turn_counter variable
-            current_turn.get_rig.asset_generator(turn_counter)
+            current_turn.get_rig().asset_generator(turn_counter)
 
     # Activates the rig checking if there is a "CryptoToken" in the inventory of the current player
     # It will remove the "CryptoToken" for the inventory and then change the rig to true
@@ -110,7 +97,7 @@ class Hacker:
                 # Will remove the CryptoToken from the inventory
                 self.get_inventory().remove("CryptoToken")
                 # Will set the rig to true
-                self.__rig = True
+                self.__rig_checker = True
                 print("The rig has been activated!")
                 print(self.__str__())
 
@@ -128,11 +115,11 @@ class Hacker:
 
     def data_spike(self, other_player):
         # Will call the rig file in the local variable so that it can all be updated seamless
-        my_rig = self.get_rig
+        my_rig = self.get_rig()
         # This will also call the storage class in the rig file using the my_rig Parameter
         storage = my_rig.get_storage()
         # If not in the self.__rig global scope it wil ask the user to activate the rig first
-        if not self.__rig:
+        if not self.__rig_checker:
             print("Please activate the rig first.")
             return
         if self.trace_level() >= 5:
@@ -147,13 +134,13 @@ class Hacker:
 
             # It will then get the damage which is being returned from the damage class from
             # the other_players damage class (basically the parameters of the other player)
-            damage = other_player.get_rig.damage()
+            damage = other_player.get_rig().damage(base_damage=1.0)
 
             print(f"{self.__name} has damaged {other_player.__name}'s rig!")
             print(
-                f"{other_player.__name}'s rig damage counter is now {damage}. Broken={other_player.get_rig.get_broken()}")
+                f"{other_player.__name}'s rig damage counter is now {damage}. Broken={other_player.get_rig().get_broken()}")
             print(f"{self.__name}'s rig -> {my_rig}")
-            print(f"{other_player.__name}'s rig -> {other_player.get_rig}")
+            print(f"{other_player.__name}'s rig -> {other_player.get_rig()}")
             # This is a check to make sure the player has a Removable Drive so they can steal
             # the other players items
             if "Removable_Drive" not in storage:
@@ -166,11 +153,11 @@ class Hacker:
             # This is checking if the other players rig is broken by calling the rig local scope broken class for the
             # other player and then also checking if the other players rig is encrypted so the current
             # player is able to steal items
-            elif other_player.get_rig.get_broken() == True and other_player.get_asset.get_encrypted() == False:
+            elif other_player.get_rig().get_broken() == True and other_player.get_asset.get_encrypted() == False:
                 # Removing the "Removable_Drive" for the current players rig's storage
                 my_rig.get_storage().remove("Removable_Drive")
                 # Getting the return value from the other players rig storage
-                other_player_storage = other_player.get_rig.get_storage()
+                other_player_storage = other_player.get_rig().get_storage()
                 for item in other_player_storage[:]: #<--- Using a splice
                     # Appending all items from the other players rig storage
                     my_rig.get_storage().append(item)
@@ -179,7 +166,7 @@ class Hacker:
         else:
             print("A Data Spike item was not found.")
 
-            if rig.get_broken():
+            if my_rig.get_broken():
                 self.__inventory.remove("Removable_Drive")
         self.__trace_level += 1
 
@@ -198,7 +185,7 @@ class Hacker:
                 self.__inventory.remove(item)
                 # It will then change the current players encrypted value
                 # to true
-                self.get_asset.set_encrypted(1)
+                self.asset.set_encrypted(1)
                 print("Asset encrypted.")
 
     # Will first check if the rig is activated
@@ -208,11 +195,11 @@ class Hacker:
     # the current players rig to level up
     def upgrade_rig(self):
 
-        my_rig = self.get_rig
+        my_rig = self.get_rig()
         storage = my_rig.get_storage()
 
         # Checks if the rig is activated first
-        if not self.__rig:
+        if not self.__rig_checker:
             print("Please activate the rig first.")
             print(self.__str__())
             return
@@ -228,57 +215,91 @@ class Hacker:
             # Will remove the "HardwarePatch" from the current players rig storage
             storage.remove("HardwarePatch")
             # Then will upgrade the current players rig.
-            upgrade_level = rig.level_upgrade()
+            upgrade_level = my_rig.level_upgrade()
             print(upgrade_level)
         else:
+            # This checks if there is a Hardware Patch or not
             print("A Hardware Patch item was not found.")
 
         print(self.__str__())
 
+    # This will allow the user to store the asset either
+    # by storing all assets or asking the user to store just one
+    # this will be done with either O as one or A as all
     def store_asset(self):
-        my_rig = self.get_rig
+        my_rig = self.get_rig()
         storage = my_rig.get_storage()
         inventory = self.get_inventory()
 
+        # This checks if the user would like to store one asset or all assets
         input1 = input("Would you like to store one asset or all assets [O|A]")
         if input1 == "O":
-           for item in inventory:
-               storage_check = my_rig.storage_upgrade(item)
+           # This will loop through the current players inventory
+           for item in inventory[:]:
+               # Then using the storage upgrade method it will return the value
+               # true or false
+               storage_check = my_rig.storage_upgrade(item) # <-- this item will pass in the current item in the inventory
+               # If the value is equal to true
                if storage_check:
-                  return None
+                  return None # <-- This will get the user out the loop ending it basically
+               # If the value is equal to false it will remove the each item in the inventory
                inventory.remove(item)
+           # Bunch of prints here
            print(f"{self.__name}'s inventory -> {storage}")
            print(f"{self.__name}'s rig -> {my_rig}")
+        # This is for one input instead of all the values in the inventory
         elif input1 == "A":
+            # Then it will check what asset the current player wants to store
             asset1 = input("What asset do you want to store?:")
+            # Then it will check if the asset is in the inventory
             if asset1 in inventory:
+               # Then it will check if the value is true or false in the current players
+               # storage upgrade method
                storage_check = my_rig.storage_upgrade(asset1)
+               # Then checking if it's true it will kick the user out of the loop
                if storage_check:
                   return None
+            # If it's false it will remove the asset the user requested
             else:
                 inventory.remove(asset1)
                 print(storage)
         self.__trace_level += 1
         return storage
 
+    # Basically the same as store asset however the roles are reversed
+    # with the user moving assets from the rigs storage to the users
+    # inventory
     def retrieve_asset(self):
-        my_rig = self.get_rig
+        my_rig = self.get_rig()
         storage = my_rig.get_storage()
         inventory = self.get_inventory()
 
+        # This will ask the user if they would like to retrieve one asset or all assets
         input1 = input("Would you like to retrieve one asset or all assets [O|A]")
+        # This will ask the user if they would like to retrieve one asset or all the assets
         if input1 == "O":
+            # This will loop through all the items in the current users storage
             for item in storage:
+                # This will append all the items using the current users inventory
                 inventory.append(item)
+                # Then to make sure there aren't any duplicates it will remove
+                # all the items from the storage
                 storage.remove(item)
             print(f"{self.__name}'s inventory -> {self.__inventory}")
             print(f"{self.__name}'s rig -> {my_rig}")
+        # This will check if the user wants to retrieve one asset
         elif input1 == "A":
+            # This will check what asset the user wants to retrieve
             asset2 = input("What asset do you want to retrieve?:")
+            # Then it will loop through the current players rig storage
+            # and check what asset the user wants to retrieve
             if asset2 in storage:
+                # Then it will append it to the current players inventory
                 inventory.append(asset2)
+                # Then it will remove the same asset from the storage to make sure there aren't
+                # any duplicates
                 storage.remove(asset2)
         self.__trace_level += 1
 
     def __str__(self):
-        return f"{self.__name} + {self.__inventory} + {self.get_rig} + {self.__trace_level}"
+        return f"{self.__name} + {self.__inventory} + {self.get_rig()} + {self.__trace_level}"
