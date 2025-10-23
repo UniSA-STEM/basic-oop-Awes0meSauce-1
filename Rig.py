@@ -14,7 +14,7 @@ class Rig:
         self.__name = "Rig"
         self.__damage_counter = 0
         self.__broken = False
-        self.__storage = ["Data_Spike", "Data_Spike", "Data_Spike", "Removable_Drive", "HardwarePatch"]
+        self.__storage = ["HardwarePatch", "HardwarePatch" ,"HardwarePatch", "HardwarePatch",]
         self.__upgrade_level = 0
 
     def get_broken(self):
@@ -33,6 +33,17 @@ class Rig:
         if self.get_storage() == "CryptoToken":
             self.__damage_counter = 0
             self.__broken = False
+
+    def storage_upgrade(self, item):
+        storage_max = False
+        max_storage = 3 + self.get_upgrade_level()
+        if len(self.get_storage()) < max_storage:
+           self.get_storage().append(item)
+           storage_max = False
+        else:
+            print("Storage is full")
+            storage_max = True
+        return storage_max
 
     def level_upgrade(self):
         if self.get_upgrade_level() >= 0:

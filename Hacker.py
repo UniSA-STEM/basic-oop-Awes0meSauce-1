@@ -118,7 +118,7 @@ class Hacker:
     def trace_level(self):
         if self.get_trace_level() >= 5:
             print("Hacker is exposed, please lower trace level.")
-        print(self.__str__())
+        return self.get_trace_level()
 
     # Using the other_player as a parameter it will first check if the rig is activated
     # then checking if the "Data_Spike" is in storage, if so it will then remove the data_spike
@@ -135,6 +135,9 @@ class Hacker:
         if not self.__rig:
             print("Please activate the rig first.")
             return
+        if self.trace_level() >= 5:
+           return
+
         # This will check the if the "Data_Spike" is in the storage of the current player.
         if "Data_Spike" in storage:
 
@@ -184,6 +187,8 @@ class Hacker:
     # Then it will change the encryption of the player currently
     # to true
     def encrypt_assets(self):
+        if self.trace_level() >= 5:
+           return
         # Will loop through the self.__inventory until an item is found
         for item in list(self.__inventory):
             # This will check if the item is a SecurityChip
@@ -237,17 +242,21 @@ class Hacker:
 
         input1 = input("Would you like to store one asset or all assets [O|A]")
         if input1 == "O":
-            for item in inventory:
-                storage.append(item)
-                inventory.remove(item)
-            print(f"{self.__name}'s inventory -> {storage}")
-            print(f"{self.__name}'s rig -> {my_rig}")
+           for item in inventory:
+               storage_check = my_rig.storage_upgrade(item)
+               if storage_check:
+                  return None
+               inventory.remove(item)
+           print(f"{self.__name}'s inventory -> {storage}")
+           print(f"{self.__name}'s rig -> {my_rig}")
         elif input1 == "A":
             asset1 = input("What asset do you want to store?:")
-
             if asset1 in inventory:
+               storage_check = my_rig.storage_upgrade(asset1)
+               if storage_check:
+                  return None
+            else:
                 inventory.remove(asset1)
-                storage.append(asset1)
                 print(storage)
         self.__trace_level += 1
         return storage
