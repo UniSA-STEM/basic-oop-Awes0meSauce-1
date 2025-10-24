@@ -76,15 +76,11 @@ class Rig:
         self.__damage_counter = round(self.__damage_counter + round(true_damage, 2),2)
 
         # This checks if the damage counter is equal or less than 2
-        if self.get_damage_counter() <= 2:
-            # If so it prints the damage counter
-           print(self.__damage_counter)
-
+        if self.__damage_counter >= 2:
+           self.__broken = True
+           print("Rig damaged!")
         else:
-            # Otherwise it will set the self.__broken
-            # to true
-            self.__broken = True
-            print("Rig damaged!")
+            print(self.__damage_counter)
 
         # Then it will return the self.get_damage_counter
         return self.get_damage_counter()
