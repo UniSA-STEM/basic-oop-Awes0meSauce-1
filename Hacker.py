@@ -17,7 +17,7 @@ class Hacker:
         self.__rig_checker = False
         self.__rig = Rig()
         self.asset = Asset()
-        self.__trace_level = 0
+        self.__trace_level = 0        self.__encrypted_assets = []
 
     # Gets the inventory and returns it.
     def get_inventory(self): return self.__inventory
@@ -175,19 +175,44 @@ class Hacker:
     # Then it will change the encryption of the player currently
     # to true
     def encrypt_assets(self):
+        rigs_storage = self.get_rig().get_storage()
+        hackers_inventory = self.__inventory
+        all_assets = rigs_storage + hackers_inventory
+
         if self.trace_level() >= 5:
            return
+
+
+        if "SecurityChip" not in all_assets:
+            print("No security chip available.")
+            return
+            # If there is a SecurityChip it will remove
+            # it from the inventory of the current player
+            self.__inventory.remove(item)
+        print("All available to encrypt:")
         # Will loop through the self.__inventory until an item is found
-        for item in list(self.__inventory):
-            # This will check if the item is a SecurityChip
-            if item == "SecurityChip":
+        for inventory in self.__inventory:
+            print(f"{inventory} (inventory) ")
+        for rig in rigs_storage:
+            print(f"{rig} (rig) ")
+
+        asset_choice = input("Enter the name of the asset you want to encrypt:").strip()
+
+        in_inventory = asset_choice in self.__inventory
+        in_rig = asset_choice in rigs_storage
+        if not (in_inventory or in_rig):
+           print(f"{asset_choice} is not found in your inventory or rig storage.")
+           return
                 # If there is a SecurityChip it will remove
                 # it from the inventory of the current player
-                self.__inventory.remove(item)
-                # It will then change the current players encrypted value
-                # to true
-                self.asset.set_encrypted(1)
-                print("Asset encrypted.")
+        self.__inventory.remove("SecurityChip")
+            # It will then change the current players encrypted value
+            # to true
+        self.asset.set_encrypted(1)
+        self.__encrypted_assets.append(asset_choice)
+        print(self.__encrypted_assets)
+
+        print(f"The asset {asset_choice} has been encrypted.")
 
     # Will first check if the rig is activated
     # then it will check if the inventory is not empty
