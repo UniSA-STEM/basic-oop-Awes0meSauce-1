@@ -6,6 +6,7 @@ ID: 110410979
 Username: galjh002
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
+from importlib.resources import open_text
 
 from Rig import Rig
 from Asset import Asset
@@ -17,7 +18,8 @@ class Hacker:
         self.__rig_checker = False
         self.__rig = Rig()
         self.asset = Asset()
-        self.__trace_level = 0        self.__encrypted_assets = []
+        self.__trace_level = 0
+        self.__encrypted_assets = []
 
     # Gets the inventory and returns it.
     def get_inventory(self): return self.__inventory
@@ -147,25 +149,32 @@ class Hacker:
             if "Removable_Drive" not in storage:
                 print("There was no Removable_Drive in the storage")
                 print(f"{my_rig}")
-            # This also checks if the other player encrypted the items first so they aren't able to steal anything
-            elif other_player.get_asset.get_encrypted():
-                print(f"The rig was encrypted. {other_player.get_asset.get_encrypted()}")
 
             # This is checking if the other players rig is broken by calling the rig local scope broken class for the
             # other player and then also checking if the other players rig is encrypted so the current
             # player is able to steal items
-            elif other_player.get_rig().get_broken() == True and other_player.get_asset.get_encrypted() == False:
+            elif other_player.get_rig().get_broken() == True:
                 # Removing the "Removable_Drive" for the current players rig's storage
                 my_rig.get_storage().remove("Removable_Drive")
                 # Getting the return value from the other players rig storage
                 other_player_storage = other_player.get_rig().get_storage()
-                for item in other_player_storage[:]: #<--- Using a splice
+                for item in other_player_storage[:]:  # <--- Using a splice
                     # Appending all items from the other players rig storage
+                    if item in other_player.__encrypted_assets:
+                       other_player.__encrypted_assets.remove(item)
+                       continue
                     my_rig.get_storage().append(item)
                     # Deleting to make sure there aren't duplicates
                     other_player_storage.remove(item)
-        else:
-            print("A Data Spike item was not found.")
+                other_player_inventory = other_player.get_inventory()
+                for item in other_player_inventory[:]:
+                    if item in other_player.__encrypted_assets:
+                       other_player.__encrypted_assets.remove(item)
+                       continue
+                    my_rig.get_storage().append(item)
+                    other_player_inventory.remove(item)
+            else:
+                 print("A Data Spike item was not found.")
 
             if my_rig.get_broken():
                 self.__inventory.remove("Removable_Drive")

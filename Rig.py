@@ -14,7 +14,7 @@ class Rig:
         self.__name = "Rig"
         self.__damage_counter = 0
         self.__broken = False
-        self.__storage = ["Data_Spike","Data_Spike","HardwarePatch", "HardwarePatch",]
+        self.__storage = ["Data_Spike","Data_Spike", "Data_Spike", "Data_Spike" ,"HardwarePatch", "HardwarePatch", "Removable_Drive"]
         self.__upgrade_level = 0
         self.__reduction_rate = 0.0
 
