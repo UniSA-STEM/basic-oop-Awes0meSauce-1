@@ -14,7 +14,7 @@ class Rig:
         self.__name = "Rig"
         self.__damage_counter = 0
         self.__broken = False
-        self.__storage = ["Data_Spike","HardwarePatch", "HardwarePatch",]
+        self.__storage = ["Data_Spike","Data_Spike","HardwarePatch", "HardwarePatch",]
         self.__upgrade_level = 0
         self.__reduction_rate = 0.0
 
@@ -47,7 +47,7 @@ class Rig:
         storage_max = False
         # This will get the max storage of a base value of 3
         # and then upgrade by one every level
-        max_storage = 3 + self.get_upgrade_level()
+        max_storage = 7 + self.get_upgrade_level()
         # It will then check if the rigs storage is lower
         # than the max storage
         if len(self.get_storage()) < max_storage:
@@ -108,6 +108,18 @@ class Rig:
            print(f"Asset generated: {new_asset}")
            turn_counter = 0
         return turn_counter
+
+    def rig_condition(self):
+        rig_damage = self.get_damage_counter()
+        if rig_damage == 0:
+            print("Rig is pristine [Level 0]")
+        elif 0 < rig_damage < 1:
+            print("Rig is slightly broken [Level 1]")
+        elif 1 <= rig_damage < 2:
+             print("Rig is rig is heavily broken [Level 2]")
+        elif rig_damage >= 2:
+            print ("Rig is broken [Level 3]")
+
 
 
     def __str__(self):

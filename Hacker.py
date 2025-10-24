@@ -74,6 +74,7 @@ class Hacker:
                 # Prints the __str__ of the current turn
                 elif battle_input == 7:
                     print(current_turn)
+                    print(current_turn.get_rig().rig_condition())
                 # Ends the turn
                 elif battle_input == 8:
                     print(f"{current_turn.__name} has ended the turn")
@@ -279,7 +280,7 @@ class Hacker:
         # This will ask the user if they would like to retrieve one asset or all the assets
         if input1 == "O":
             # This will loop through all the items in the current users storage
-            for item in storage:
+            for item in storage[:]:
                 # This will append all the items using the current users inventory
                 inventory.append(item)
                 # Then to make sure there aren't any duplicates it will remove
