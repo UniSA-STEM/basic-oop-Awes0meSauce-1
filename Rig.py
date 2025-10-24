@@ -1,9 +1,14 @@
 """
 File: Rig.py
-Description: <A brief description of this Python module.>
+Description: Has the methods storage upgrade, level upgrade, damage,
+asset generator and rig condition storage upgrade allows the user
+to upgrade there storage with their upgrade level, level upgrade
+allows the user to upgrade there level damage deals damage to the other player
+asset generator generators assets randomly and rig condition checks the
+condition of the rig
 Author: Jack Gallagher
 ID: 110410979
-Username: galjh002
+Username: Awes0meSauce
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 import random
@@ -14,7 +19,8 @@ class Rig:
         self.__name = "Rig"
         self.__damage_counter = 0
         self.__broken = False
-        self.__storage = ["Data_Spike","Data_Spike", "Data_Spike", "Data_Spike" ,"HardwarePatch", "HardwarePatch", "Removable_Drive"]
+        self.__storage = ["Data_Spike", "Data_Spike", "Data_Spike", "Data_Spike", "HardwarePatch", "HardwarePatch",
+                          "Removable_Drive"]
         self.__upgrade_level = 0
         self.__reduction_rate = 0.0
 
@@ -30,6 +36,12 @@ class Rig:
     def get_upgrade_level(self):
         return self.__upgrade_level
 
+    def get_reduction_rate(self):
+        return self.__reduction_rate
+
+    def get_name(self):
+        return self.__name
+
     # This will repair the rig as it will return the self.__damage_counter to 0
     # and return self.__broken to False
     def repair(self):
@@ -44,7 +56,6 @@ class Rig:
     def storage_upgrade(self, item):
         # This will allow to return if the storage
         # is maxed or not
-        storage_max = False
         # This will get the max storage of a base value of 3
         # and then upgrade by one every level
         max_storage = 7 + self.get_upgrade_level()
@@ -52,8 +63,8 @@ class Rig:
         # than the max storage
         if len(self.get_storage()) < max_storage:
             # It will then append the item
-           self.get_storage().append(item)
-           storage_max = False
+            self.get_storage().append(item)
+            storage_max = False
         else:
             # If not it will print that the storage
             # is full
@@ -64,23 +75,26 @@ class Rig:
     def level_upgrade(self):
         # This will check if the upgrade level is
         # greater or equal to zero
-        if self.__upgrade_level >= 0:
-           self.__upgrade_level += 1
-           # it will return that upgrade level
-           self.__reduction_rate = min(1.0, 0.2 * self.__upgrade_level)
-        return self.__upgrade_level
+        if self.get_upgrade_level() >= 0:
+            self.get_upgrade_level += 1
+            # it will return that upgrade level
+            self.__reduction_rate = min(1.0, 0.2 * self.get_upgrade_level())
+        return self.get_upgrade_level()
 
     def damage(self, base_damage=1.0):
-        true_damage = base_damage * (1 - self.__reduction_rate)
-
-        self.__damage_counter = round(self.__damage_counter + round(true_damage, 2),2)
+        # Depending on the reduction rate in this case being 20% per level
+        # it will reduce the true damage by 1 - (0.2) if the rig is level 1
+        true_damage = base_damage * (1 - self.get_reduction_rate())
+        # Then using some round functions it will round the number by adding the original damage
+        # counter and the true damage with 2 decimal points (i.e 5.9)
+        self.__damage_counter = round(self.get_damage_counter() + round(true_damage, 2), 2)
 
         # This checks if the damage counter is equal or less than 2
-        if self.__damage_counter >= 2:
-           self.__broken = True
-           print("Rig damaged!")
+        if self.get_damage_counter() >= 2:
+            self.__broken = True
+            print("Rig damaged!")
         else:
-            print(self.__damage_counter)
+            print(self.get_damage_counter())
 
         # Then it will return the self.get_damage_counter
         return self.get_damage_counter()
@@ -96,15 +110,17 @@ class Rig:
         if turn_counter == random_number:
             # If so it will generate a new asset
             # in the list of assets
-           new_asset = random.choice(assets)
+            new_asset = random.choice(assets)
             # Then it will append it to the player of that
             # turn
-           self.get_storage().append(new_asset)
+            self.get_storage().append(new_asset)
             # And print out which asset has been generated
-           print(f"Asset generated: {new_asset}")
-           turn_counter = 0
+            print(f"Asset generated: {new_asset}")
+            turn_counter = 0
         return turn_counter
 
+    # This checks the rig damage and depending on how
+    # damaged the rig is it will print a variety of outputs
     def rig_condition(self):
         rig_damage = self.get_damage_counter()
         if rig_damage == 0:
@@ -112,11 +128,9 @@ class Rig:
         elif 0 < rig_damage < 1:
             print("Rig is slightly broken [Level 1]")
         elif 1 <= rig_damage < 2:
-             print("Rig is rig is heavily broken [Level 2]")
+            print("Rig is rig is heavily broken [Level 2]")
         elif rig_damage >= 2:
-            print ("Rig is broken [Level 3]")
-
-
+            print("Rig is broken [Level 3]")
 
     def __str__(self):
-        return f"Rig {self.__name} + {self.__storage}"
+        return f"Rig {self.get_name()} + {self.get_storage()}"

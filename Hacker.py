@@ -1,9 +1,11 @@
 """
 File: Hacker.py
-Description: <A brief description of this Python module.>
+Description: Allowing two players to take turns into have breaking rigs with
+data spikes upgrading rigs, storing assets and retrieving assets however
+watch out for your trace level because if it gets to high it might cause issues
 Author: Jack Gallagher
 ID: 110410979
-Username: galjh002
+Username: Awes0meSauce
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
 
@@ -65,7 +67,7 @@ class Hacker:
             # Sets the battle_input to zero if needed
             battle_input = 0
 
-            # If the battle_input is not equal to 8 it will allow the turn to keep going until the battle_input is equal to 8
+            # If the battle_input is not equal to 8 it will allow the turn to keep going until the battle_input is equal to 9
             # which will end the turn
             while battle_input != 9:
                 battle_input = int(input(
@@ -100,7 +102,7 @@ class Hacker:
                 else:
                     print(f"{current_turn.__name} has entered an invalid choice")
 
-            # Allows to cycle turns for each players
+            # Allows to cycle turns for each player
             turn = 1 - turn
             # Increases the turn counter by one
             turn_counter += 1

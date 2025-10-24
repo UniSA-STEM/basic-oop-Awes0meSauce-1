@@ -1,6 +1,7 @@
 """
 File: main.py
-Description: <A brief description of this Python module.>
+Description: Allows all the basic commands to function like the battle
+command which is the core of the process for the whole project
 Author: Jack Gallagher
 ID: 110410979
 Username: galjh002
@@ -16,18 +17,5 @@ hacker1 = Hacker("Hacker1")
 hacker2 = Hacker("Hacker2")
 asset = Asset()
 rig = Rig()
-
-# hacker.set_inventory(["CryptoToken"])
-# hacker.rig()
-# hacker.set_inventory(["Data_Spike"])
-# print(hacker.get_inventory())
-# hacker.data_spike()
-# print(hacker)
-# print(rig)
-
-# for num in range(6):
-#     hacker.trace_level()
-#     print(hacker.get_trace_level())
-
 
 hacker1.battle([hacker1, hacker2])
