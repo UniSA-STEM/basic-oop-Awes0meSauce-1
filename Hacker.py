@@ -6,10 +6,10 @@ ID: 110410979
 Username: galjh002
 This is my own work as defined by the University's Academic Misconduct Policy.
 """
-from importlib.resources import open_text
 
 from Rig import Rig
 from Asset import Asset
+
 
 class Hacker:
     def __init__(self, name):
@@ -22,15 +22,30 @@ class Hacker:
         self.__encrypted_assets = []
 
     # Gets the inventory and returns it.
-    def get_inventory(self): return self.__inventory
+    def get_inventory(self):
+        return self.__inventory
+
+    def get_name(self):
+        return self.__name
+
     # Gets the trace_level and returns it
-    def get_trace_level(self): return self.__trace_level
+    def get_trace_level(self):
+        return self.__trace_level
+
     # Gets the rig and returns it
-    def get_rig(self): return self.__rig
+    def get_rig(self):
+        return self.__rig
+
     # Sets the trace_level using the "trace_level"
-    def set_trace_level(self, trace_level): self.__trace_level = trace_level
+    def get_encrypted_assets(self):
+        return self.__encrypted_assets
+
+    def set_trace_level(self, trace_level):
+        self.__trace_level = trace_level
+
     # Sets the inventory using the "inventory"
-    def set_inventory(self, inventory): self.__inventory = inventory
+    def set_inventory(self, inventory):
+        self.__inventory = inventory
 
     # This function will allow the players to battle using the players Parameter and then this function
     # will allow the player in turn to select something until the player ends the turn
@@ -129,7 +144,7 @@ class Hacker:
             print("Please activate the rig first.")
             return
         if self.trace_level() >= 5:
-           return
+            return
 
         # This will check the if the "Data_Spike" is in the storage of the current player.
         if "Data_Spike" not in storage:
@@ -140,10 +155,13 @@ class Hacker:
         storage.remove("Data_Spike")
         print("Data Spike item removed.")
 
-        # It will then get the damage which is being returned from the damage class from
-        # the other_players damage class (basically the parameters of the other player)
+        # This is to get a value of the other players rig
         other_rig = other_player.get_rig()
+        # This calls the other players damage method passing in a base_damage of 1
+        # for editing if needed
         damage = other_player.get_rig().damage(base_damage=1.0)
+        # This will give the return of the other players broken method
+        # so that it can check when the other players rig is broke
         check_when_broke = other_rig.get_broken()
 
         print(f"{self.__name} has damaged {other_player.__name}'s rig!")
@@ -151,105 +169,152 @@ class Hacker:
             f"{other_player.__name}'s rig damage counter is now {damage}. Broken={other_player.get_rig().get_broken()}")
         print(f"{self.__name}'s rig -> {my_rig}")
         print(f"{other_player.__name}'s rig -> {other_player.get_rig()}")
-        # This is a check to make sure the player has a Removable Drive so they can steal
-        # the other players items
+        # This produces an if statement to check when it's broken i.e the name
         if check_when_broke:
-           if "Removable_Drive" not in storage:
-              print("There was no Removable_Drive in the storage")
-              print(f"{my_rig}")
-           else:
-               storage.remove("Removable_Drive")
-               other_player_storage = other_player.get_rig().get_storage()
-               for item in other_player_storage[:]:  # <--- Using a splice
-                   # Appending all items from the other players rig storage
-                   if item in other_player.__encrypted_assets:
-                      other_player.__encrypted_assets.remove(item)
-                      continue
-                   my_rig.get_storage().append(item)
-                   # Deleting to make sure there aren't duplicates
-                   other_player_storage.remove(item)
-               other_player_inventory = other_player.get_inventory()
-               for item in other_player_inventory[:]:
-                   if item in other_player.__encrypted_assets:
-                      other_player.__encrypted_assets.remove(item)
-                      continue
-                   my_rig.get_storage().append(item)
-                   other_player_inventory.remove(item)
+            # This checks if there is a Removable_Drive not in the current -
+            # players storage.
+            if "Removable_Drive" not in storage:
+                print("There was no Removable_Drive in the storage")
+                print(f"{my_rig}")
+            else:
+                # Then it wil remove a Removeable_Drive from the current -
+                # players storage
+                storage.remove("Removable_Drive")
+                # Then this is to get a return value of the other players
+                # storage getter
+                other_player_storage = other_player.get_rig().get_storage()
+                # This will find an item in the other players storage
+                for item in other_player_storage[:]:  # <--- Using a splice
+                    # Appending all items from the other players rig storage
+                    if item in other_player.get_encrypted_assets():
+                        # This will check for the value in encrypted_assets
+                        # and if it's the same it will skip over the values in the
+                        # other rigs storage
+                        other_player.get_encrypted_assets().remove(item)
+                        # This will allow to skip over it
+                        continue
+                    # Then it will append the rest that are not encrypted
+                    my_rig.get_storage().append(item)
+                    # Deleting to make sure there aren't duplicates
+                    other_player_storage.remove(item)
+                # This will get a return value from the other players
+                # getter for inventory
+                other_player_inventory = other_player.get_inventory()
+                # Then it will loop through all the items in the other
+                # players inventory
+                for item in other_player_inventory[:]: # <-- Using a splice
+                    # Then it will check the other players encrypted assets
+                    if item in other_player.get_encrypted_assets():
+                        # This time it will check the inventory of the other players
+                        other_player.get_encrypted_assets().remove(item)
+                        continue
+                    # Will append the rest of the items that are not encrypted
+                    my_rig.get_storage().append(item)
+                    other_player_inventory.remove(item)
 
+        # This will check if the current players rig is not broken and will
+        # also check if there is a removable drive in the inventory
+        # of the current player
         if my_rig.get_broken() and "Removable_Drive" in self.__inventory:
-           self.__inventory.remove("Removable_Drive")
+            self.__inventory.remove("Removable_Drive")
         self.__trace_level += 1
 
     # Will encrypt the assets if the player has a security chip
     # Then it will change the encryption of the player currently
     # to true
     def encrypt_assets(self):
+        # This will get a return value of the storage value
+        # in the rig
         rigs_storage = self.get_rig().get_storage()
-        hackers_inventory = self.__inventory
+        # This will get a value for the return value of
+        # the current players inventory
+        hackers_inventory = self.get_inventory()
+        # Then it will combine the two into another value
+        # in this case it's called all_assets
         all_assets = rigs_storage + hackers_inventory
 
+        # Then it will check if the trace_level is greater
+        # or equal to 5
         if self.trace_level() >= 5:
-           return
+            return
 
-
+        # Then it will check if a "SecurityChip" is either
+        # in the current players rig storage or the inventory
+        # of the current player
         if "SecurityChip" not in all_assets:
             print("No security chip available.")
             return
-            # If there is a SecurityChip it will remove
-            # it from the inventory of the current player
-            self.__inventory.remove(item)
         print("All available to encrypt:")
-        # Will loop through the self.__inventory until an item is found
-        for inventory in self.__inventory:
+        # Will loop through the self.__inventory
+        for inventory in self.get_inventory():
             print(f"{inventory} (inventory) ")
+        # It will also loop through the rigs inventory
         for rig in rigs_storage:
             print(f"{rig} (rig) ")
 
+        # Using a strip function it will check what asset the user wants to encrypt
         asset_choice = input("Enter the name of the asset you want to encrypt:").strip()
 
-        in_inventory = asset_choice in self.__inventory
+        # This will check if the asset the user wants to encrypt
+        # is the inventory of the current player
+        in_inventory = asset_choice in self.get_inventory()
+        # This will also check if the asset is the rig of the current player
         in_rig = asset_choice in rigs_storage
+        # This wil check if it's not in both (inventory, rig)
         if not (in_inventory or in_rig):
-           print(f"{asset_choice} is not found in your inventory or rig storage.")
-           return
-                # If there is a SecurityChip it will remove
-                # it from the inventory of the current player
-        self.__inventory.remove("SecurityChip")
-            # It will then change the current players encrypted value
-            # to true
+            # Then will print the following
+            print(f"{asset_choice} is not found in your inventory or rig storage.")
+            return
+            # If there is a SecurityChip it will remove
+            # it from the inventory of the current player
+        self.get_inventory().remove("SecurityChip")
+        # It will then change the current players encrypted value
+        # to true
         self.asset.set_encrypted(1)
-        self.__encrypted_assets.append(asset_choice)
-        print(self.__encrypted_assets)
+        # Then it will append the asset_choice in to the encrypted asset
+        self.get_encrypted_assets().append(asset_choice)
+        # printing as so
+        print(self.get_encrypted_assets())
 
         print(f"The asset {asset_choice} has been encrypted.")
 
     def decrypt_assets(self, other_player):
+        # This will check if a security chip is not in the inventory
+        # of the current player
+        if "SecurityChip" not in self.get_inventory():
+            print("You need a Security Chip to decrypt.")
+            return
 
-        if "SecurityChip" not in self.__inventory:
-           print("You need a Security Chip to decrypt.")
-           return
+        # This will also check if there are any encrypted assets
+        # for the other player
+        if not other_player.get_encrypted_assets():
+            print(f"{other_player.get_name()} has no encrypted assets.")
 
-        if not other_player.__encrypted_assets:
-           print(f"{other_player.__name} has no encrypted assets.")
-
-        print(f"Encrypted asset belongs to {other_player.__name}.")
-        for asset_choice in other_player.__encrypted_assets[:]:
+        print(f"Encrypted asset belongs to {other_player.get_name()}.")
+        # This will loop through all the assets that are encrypted
+        # for the other player
+        for asset_choice in other_player.get_encrypted_assets()[:]:
+            # And then will print as so
             print(f"{asset_choice}")
 
+        # Then will get a value so it can ask the user what asset they
+        # would like to decrypt
         decrypt_asset = input("What asset would you like to decrypt?")
 
-        if decrypt_asset not in other_player.__encrypted_assets:
-            print(f"{decrypt_asset} is not found in {other_player.__name}'s encrypted assets.")
+        # Then this will check if the asset the user asked to decrypt
+        # is actually in the other players encrypted assets
+        if decrypt_asset not in other_player.get_encrypted_assets:
+            print(f"{decrypt_asset} is not found in {other_player.get_name}'s encrypted assets.")
         else:
-            self.__inventory.remove("SecurityChip")
+            # Then will remove a security chip if it is actually in there
+            self.get_inventory().remove("SecurityChip")
 
-            other_player.__encrypted_assets.remove(decrypt_asset)
-            print(f" You have successfully decrypted {decrypt_asset} from {other_player.__name}'s encrypted assets.")
+            # Then it will remove it from the other players encrypted asset
+            other_player.get_encrypted_assets.remove(decrypt_asset)
+            print(f" You have successfully decrypted {decrypt_asset} from {other_player.get_name}'s encrypted assets.")
 
-    # Will first check if the rig is activated
-    # then it will check if the inventory is not empty
-    # then if the current player has a HardwarePatch
-    # in the current players storage if so it will allow
+    # Will first check if the rig is activated then it will check if the inventory is not empty
+    # then if the current player has a HardwarePatch in the current players storage if so it will allow
     # the current players rig to level up
     def upgrade_rig(self):
 
@@ -292,36 +357,37 @@ class Hacker:
         # This checks if the user would like to store one asset or all assets
         input1 = input("Would you like to store one asset or all assets [O|A]")
         if input1 == "O":
-           # This will loop through the current players inventory
-           for item in inventory[:]:
-               # Then using the storage upgrade method it will return the value
-               # true or false
-               storage_check = my_rig.storage_upgrade(item) # <-- this item will pass in the current item in the inventory
-               # If the value is equal to true
-               if storage_check:
-                  return None # <-- This will get the user out the loop ending it basically
-               # If the value is equal to false it will remove the item in the inventory
-               inventory.remove(item)
-           # Bunch of prints here
-           print(f"{self.__name}'s inventory -> {storage}")
-           print(f"{self.__name}'s rig -> {my_rig}")
+            # This will loop through the current players inventory
+            for item in inventory[:]:
+                # Then using the storage upgrade method it will return the value
+                # true or false
+                storage_check = my_rig.storage_upgrade(
+                    item)  # <-- this item will pass in the current item in the inventory
+                # If the value is equal to true
+                if storage_check:
+                    return None  # <-- This will get the user out the loop ending it basically
+                # If the value is equal to false it will remove the item in the inventory
+                inventory.remove(item)
+            # Bunch of prints here
+            print(f"{self.get_name()}'s inventory -> {storage}")
+            print(f"{self.get_name()}'s rig -> {my_rig}")
         # This is for one input instead of all the values in the inventory
         elif input1 == "A":
             # Then it will check what asset the current player wants to store
             asset1 = input("What asset do you want to store?:")
             # Then it will check if the asset is in the inventory
             if asset1 in inventory:
-               # Then it will check if the value is true or false in the current players
-               # storage upgrade method
-               storage_check = my_rig.storage_upgrade(asset1)
-               # Then checking if it's true it will kick the user out of the loop
-               if storage_check:
-                  return None
+                # Then it will check if the value is true or false in the current players
+                # storage upgrade method
+                storage_check = my_rig.storage_upgrade(asset1)
+                # Then checking if it's true it will kick the user out of the loop
+                if storage_check:
+                    return None
             # If it's false it will remove the asset the user requested
             else:
                 inventory.remove(asset1)
                 print(storage)
-        self.__trace_level += 1
+        self.get_trace_level += 1
         return storage
 
     # Basically the same as store asset however the roles are reversed
@@ -343,8 +409,8 @@ class Hacker:
                 # Then to make sure there aren't any duplicates it will remove
                 # all the items from the storage
                 storage.remove(item)
-            print(f"{self.__name}'s inventory -> {self.__inventory}")
-            print(f"{self.__name}'s rig -> {my_rig}")
+            print(f"{self.get_name()}'s inventory -> {self.get_inventory()}")
+            print(f"{self.get_name()}'s rig -> {my_rig}")
         # This will check if the user wants to retrieve one asset
         elif input1 == "A":
             # This will check what asset the user wants to retrieve
@@ -357,7 +423,7 @@ class Hacker:
                 # Then it will remove the same asset from the storage to make sure there aren't
                 # any duplicates
                 storage.remove(asset2)
-        self.__trace_level += 1
+        self.get_trace_level += 1
 
     def __str__(self):
-        return f"{self.__name} + {self.__inventory} + {self.get_rig()} + {self.__trace_level}"
+        return f"{self.get_name()} + {self.get_inventory()} + {self.get_rig()} + {self.get_trace_level()}"
